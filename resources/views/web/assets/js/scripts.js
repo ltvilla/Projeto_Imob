@@ -1,11 +1,5 @@
 $(function () {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $('body').on('click', '[data-toggle="lightbox"]', function (event) {
         event.preventDefault();
         $(this).ekkoLightbox();
@@ -28,13 +22,18 @@ $(function () {
 
     $('body').on('change', 'select[name*="filter_"]', function() {
 
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         var search = $(this);
         var nextIndex = $(this).data('index') + 1;
 
         $.post(search.data('action'), {search: search.val()}, function(response) {
-            
+
             if(response.status === 'success') {
-                
+
                 $('select[data-index="' + nextIndex + '"]').empty();
                 console.log(response.data);
                 $.each(response.data, function(key, value){
@@ -45,7 +44,7 @@ $(function () {
                         })
                     );
                 });
-                
+
                 $.each($('select[name*="filter_"]'), function(index, element){
                     if($(element).data('index') >= nextIndex + 1){
                         $(element).empty().append(
@@ -76,6 +75,4 @@ $(function () {
         }, 'json');
     })
 
-    delete $.ajaxSettings.headers['X-CSRF-TOKEN'];
-    
 });
