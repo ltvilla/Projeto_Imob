@@ -3,7 +3,6 @@
 namespace TemplateInicial;
 
 use Illuminate\Database\Eloquent\Model;
-use TemplateInicial\User;
 
 class Company extends Model
 {
